@@ -1,114 +1,121 @@
 import React, { useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { Shield, Zap, Activity, Lock, Search, Database } from 'lucide-react';
+import HackerText from '../components/effects/HackerText';
+import MatrixLogo from '../components/effects/MatrixLogo';
 
 const Landing = () => {
   useEffect(() => {
     // Disabled for performance in preview iframe
-    /*
-    if (window.particlesJS) {
-      window.particlesJS('particles-js', {
-        particles: {
-          number: { value: 80, density: { enable: true, value_area: 800 } },
-          color: { value: '#00ff88' },
-          shape: { type: 'circle' },
-          opacity: { value: 0.5, random: false },
-          size: { value: 3, random: true },
-          line_linked: { enable: true, distance: 150, color: '#00ff88', opacity: 0.4, width: 1 },
-          move: { enable: true, speed: 2, direction: 'none', random: false, straight: false, out_mode: 'out', bounce: false }
-        },
-        interactivity: {
-          detect_on: 'canvas',
-          events: { onhover: { enable: true, mode: 'repulse' }, onclick: { enable: true, mode: 'push' }, resize: true },
-          modes: { repulse: { distance: 100, duration: 0.4 }, push: { particles_nb: 4 } }
-        },
-        retina_detect: true
-      });
-    }
-    */
   }, []);
 
   return (
     <div className="min-h-screen bg-[#030712] text-[#f0f4ff] font-sans overflow-x-hidden">
       <div id="particles-js" className="absolute inset-0 z-0 opacity-30"></div>
       
-      <nav className="relative z-10 flex items-center justify-between px-8 py-6 border-b border-[#1a2035] bg-[#0a0f1e]/80 backdrop-blur-md">
+      <nav className="relative z-10 flex items-center justify-between px-8 py-6 border-b border-[#1a2035] bg-[#0a0f1e]/40 backdrop-blur-md">
         <div className="flex items-center space-x-2">
-          <Shield className="w-8 h-8 text-[#00ff88]" />
-          <span className="font-display font-bold text-2xl tracking-wider">KEYGHOST</span>
+          <Shield className="w-8 h-8 text-[#00ff88] drop-shadow-[0_0_10px_rgba(0,255,136,0.5)]" />
+          <Link to="/" className="flex items-center">
+            <MatrixLogo text="KEYGHOST" fontSize={28} />
+          </Link>
         </div>
-        <div className="space-x-6 font-mono text-sm">
+        <div className="space-x-6 font-mono text-xs tracking-widest">
           <Link to="/login" className="text-[#8892b0] hover:text-[#00ff88] transition-colors">LOGIN</Link>
-          <Link to="/register" className="px-6 py-2 bg-[#00ff88]/10 text-[#00ff88] border border-[#00ff88]/50 rounded-md hover:bg-[#00ff88]/20 hover:shadow-[0_0_15px_rgba(0,255,136,0.3)] transition-all">CREATE ACCOUNT</Link>
+          <Link to="/register" className="cyber-button px-6 py-2 rounded-md">CREATE_ACCOUNT</Link>
         </div>
       </nav>
 
       <main className="relative z-10 container mx-auto px-4 pt-24 pb-32">
-        <div className="text-center max-w-4xl mx-auto space-y-8">
-          <h1 className="font-display font-black text-6xl md:text-8xl tracking-tighter text-transparent bg-clip-text bg-gradient-to-r from-[#00ff88] to-[#00d4ff] drop-shadow-[0_0_30px_rgba(0,255,136,0.3)]">
-            YOUR PASSWORD ISN'T ENOUGH
-          </h1>
-          <p className="text-xl md:text-2xl text-[#8892b0] font-light max-w-2xl mx-auto">
-            KeyGhost learns <span className="text-[#f0f4ff] font-medium">HOW</span> you type. Not just <span className="text-[#f0f4ff] font-medium">WHAT</span> you type. Invisible biometric security for the modern web.
+        <div className="text-center max-w-5xl mx-auto space-y-12">
+          <div className="space-y-4">
+            <div className="inline-block px-3 py-1 bg-[#00ff88]/10 border border-[#00ff88]/30 rounded text-[#00ff88] font-mono text-[10px] tracking-[0.3em] mb-4 animate-pulse">
+              SYSTEM_STATUS: SECURED
+            </div>
+            <h1 
+              className="glitch font-display font-black text-6xl md:text-9xl tracking-tighter text-[#f0f4ff] leading-none"
+              data-text="YOUR PASSWORD ISN'T ENOUGH"
+            >
+              <HackerText text="YOUR PASSWORD ISN'T ENOUGH" speed={30} />
+            </h1>
+          </div>
+          
+          <p className="text-lg md:text-xl text-[#8892b0] font-mono max-w-3xl mx-auto leading-relaxed">
+            <span className="text-[#00ff88]">&gt;</span> KeyGhost analyzes <span className="text-[#00d4ff] underline decoration-[#00d4ff]/30 underline-offset-4">behavioral biometrics</span>. 
+            Invisible protection that learns <span className="text-[#f0f4ff] font-bold">HOW</span> you type, not just what you type.
           </p>
           
-          <div className="flex flex-col sm:flex-row items-center justify-center gap-6 pt-8">
-            <Link to="/register" className="w-full sm:w-auto px-8 py-4 bg-[#00ff88] text-[#030712] font-bold rounded-lg hover:bg-[#00d4ff] hover:shadow-[0_0_30px_rgba(0,255,136,0.5)] transition-all transform hover:-translate-y-1 flex items-center justify-center space-x-2">
+          <div className="flex flex-col sm:flex-row items-center justify-center gap-8 pt-4">
+            <Link to="/register" className="cyber-button w-full sm:w-auto px-10 py-5 text-lg font-bold rounded-lg flex items-center justify-center space-x-3 glow-pulse">
               <Lock className="w-5 h-5" />
-              <span>CREATE ACCOUNT</span>
+              <span>INITIALIZE_PROTECTION</span>
             </Link>
-            <Link to="/demo" className="w-full sm:w-auto px-8 py-4 bg-transparent border-2 border-[#1a2035] text-[#f0f4ff] font-bold rounded-lg hover:border-[#00d4ff] hover:text-[#00d4ff] hover:shadow-[0_0_20px_rgba(0,212,255,0.2)] transition-all flex items-center justify-center space-x-2">
+            <Link to="/demo" className="w-full sm:w-auto px-10 py-5 bg-transparent border border-[#1a2035] text-[#8892b0] font-mono text-sm rounded-lg hover:border-[#00d4ff] hover:text-[#00d4ff] transition-all flex items-center justify-center space-x-3">
               <Zap className="w-5 h-5" />
-              <span>LIVE DEMO &rarr;</span>
+              <span>RUN_SIMULATION</span>
             </Link>
           </div>
         </div>
 
-        <div className="mt-32 grid grid-cols-1 md:grid-cols-3 gap-8">
-          <div className="p-8 rounded-2xl bg-[#0a0f1e] border border-[#1a2035] hover:border-[#00ff88]/50 transition-colors group relative overflow-hidden">
-            <div className="absolute top-0 right-0 w-32 h-32 bg-[#00ff88]/5 rounded-bl-full -mr-16 -mt-16 transition-transform group-hover:scale-150"></div>
-            <Activity className="w-12 h-12 text-[#00ff88] mb-6" />
-            <h3 className="text-xl font-bold mb-3 font-display">Zero Extra Steps</h3>
-            <p className="text-[#8892b0]">No hardware tokens or SMS codes. Just type your password normally. The security is invisible.</p>
+        <div className="mt-40 grid grid-cols-1 md:grid-cols-3 gap-12">
+          <div className="glass-panel p-10 rounded-2xl border border-[#1a2035] hover:border-[#00ff88]/50 transition-all group">
+            <div className="w-16 h-16 bg-[#00ff88]/10 rounded-xl flex items-center justify-center mb-8 group-hover:scale-110 transition-transform">
+              <Activity className="w-8 h-8 text-[#00ff88]" />
+            </div>
+            <h3 className="text-xl font-bold mb-4 font-display tracking-wider">ZERO_FRICTION</h3>
+            <p className="text-[#8892b0] font-mono text-sm leading-relaxed">No hardware tokens. No SMS codes. Just your natural typing rhythm as the second factor.</p>
           </div>
-          <div className="p-8 rounded-2xl bg-[#0a0f1e] border border-[#1a2035] hover:border-[#00d4ff]/50 transition-colors group relative overflow-hidden">
-            <div className="absolute top-0 right-0 w-32 h-32 bg-[#00d4ff]/5 rounded-bl-full -mr-16 -mt-16 transition-transform group-hover:scale-150"></div>
-            <Search className="w-12 h-12 text-[#00d4ff] mb-6" />
-            <h3 className="text-xl font-bold mb-3 font-display">ML-Powered Analysis</h3>
-            <p className="text-[#8892b0]">Analyzes dwell times, flight times, and typing rhythm using advanced statistical models.</p>
+          <div className="glass-panel p-10 rounded-2xl border border-[#1a2035] hover:border-[#00d4ff]/50 transition-all group">
+            <div className="w-16 h-16 bg-[#00d4ff]/10 rounded-xl flex items-center justify-center mb-8 group-hover:scale-110 transition-transform">
+              <Search className="w-8 h-8 text-[#00d4ff]" />
+            </div>
+            <h3 className="text-xl font-bold mb-4 font-display tracking-wider">NEURAL_ENGINE</h3>
+            <p className="text-[#8892b0] font-mono text-sm leading-relaxed">Advanced ML models analyze dwell times and flight times to verify identity with 99.9% accuracy.</p>
           </div>
-          <div className="p-8 rounded-2xl bg-[#0a0f1e] border border-[#1a2035] hover:border-[#ff2d55]/50 transition-colors group relative overflow-hidden">
-            <div className="absolute top-0 right-0 w-32 h-32 bg-[#ff2d55]/5 rounded-bl-full -mr-16 -mt-16 transition-transform group-hover:scale-150"></div>
-            <Database className="w-12 h-12 text-[#ff2d55] mb-6" />
-            <h3 className="text-xl font-bold mb-3 font-display">Real-time Threat Dashboard</h3>
-            <p className="text-[#8892b0]">Monitor anomalies and blocked attempts instantly with our comprehensive security operations center.</p>
+          <div className="glass-panel p-10 rounded-2xl border border-[#1a2035] hover:border-[#ff2d55]/50 transition-all group">
+            <div className="w-16 h-16 bg-[#ff2d55]/10 rounded-xl flex items-center justify-center mb-8 group-hover:scale-110 transition-transform">
+              <Database className="w-8 h-8 text-[#ff2d55]" />
+            </div>
+            <h3 className="text-xl font-bold mb-4 font-display tracking-wider">THREAT_INTEL</h3>
+            <p className="text-[#8892b0] font-mono text-sm leading-relaxed">Monitor anomalies and blocked attempts instantly with our comprehensive security operations center.</p>
           </div>
         </div>
 
-        <div className="mt-32 max-w-3xl mx-auto">
-          <h2 className="text-3xl font-display font-bold text-center mb-12">LIVE THREAT FEED</h2>
-          <div className="bg-[#0a0f1e] border border-[#1a2035] rounded-xl p-6 font-mono text-sm space-y-4 h-64 overflow-hidden relative shadow-inner">
-            <div className="absolute inset-0 pointer-events-none bg-gradient-to-b from-transparent via-transparent to-[#0a0f1e] z-10"></div>
-            <div className="animate-[slideUp_10s_linear_infinite] space-y-4">
-              <div className="flex items-center space-x-4 text-[#ff2d55] bg-[#ff2d55]/10 p-3 rounded border border-[#ff2d55]/20">
-                <span className="w-2 h-2 rounded-full bg-[#ff2d55] animate-pulse"></span>
-                <span>BLOCKED — User @alex_k — Typing anomaly detected — 2 min ago</span>
+        <div className="mt-40 max-w-4xl mx-auto">
+          <div className="flex items-center justify-between mb-8">
+            <h2 className="text-2xl font-display font-bold tracking-[0.3em] text-[#00ff88]">LIVE_THREAT_FEED</h2>
+            <div className="flex items-center space-x-2 text-[10px] font-mono text-[#8892b0]">
+              <span className="w-2 h-2 rounded-full bg-[#00ff88] animate-pulse"></span>
+              <span>REAL_TIME_MONITORING</span>
+            </div>
+          </div>
+          <div className="glass-panel border border-[#1a2035] rounded-xl p-8 font-mono text-xs space-y-4 h-80 overflow-hidden relative shadow-2xl">
+            <div className="absolute inset-0 pointer-events-none bg-gradient-to-b from-transparent via-transparent to-[#0a0f1e]/80 z-10"></div>
+            <div className="animate-[slideUp_15s_linear_infinite] space-y-6">
+              <div className="flex items-center space-x-6 text-[#ff2d55] border-l-2 border-[#ff2d55] pl-4 py-1">
+                <span className="opacity-50">[14:22:01]</span>
+                <span className="font-bold">BLOCKED</span>
+                <span className="text-[#8892b0]">User @alex_k — Typing anomaly detected — 0.42 confidence</span>
               </div>
-              <div className="flex items-center space-x-4 text-[#00ff88] bg-[#00ff88]/10 p-3 rounded border border-[#00ff88]/20">
-                <span className="w-2 h-2 rounded-full bg-[#00ff88]"></span>
-                <span>ALLOWED — User @priya_m — Biometric match 94% — 4 min ago</span>
+              <div className="flex items-center space-x-6 text-[#00ff88] border-l-2 border-[#00ff88] pl-4 py-1">
+                <span className="opacity-50">[14:19:45]</span>
+                <span className="font-bold">VERIFIED</span>
+                <span className="text-[#8892b0]">User @priya_m — Biometric match 94% — Session authorized</span>
               </div>
-              <div className="flex items-center space-x-4 text-[#ff2d55] bg-[#ff2d55]/10 p-3 rounded border border-[#ff2d55]/20">
-                <span className="w-2 h-2 rounded-full bg-[#ff2d55] animate-pulse"></span>
-                <span>BLOCKED — User @raj_dev — Possible account takeover — 7 min ago</span>
+              <div className="flex items-center space-x-6 text-[#ff2d55] border-l-2 border-[#ff2d55] pl-4 py-1">
+                <span className="opacity-50">[14:15:12]</span>
+                <span className="font-bold">BLOCKED</span>
+                <span className="text-[#8892b0]">User @raj_dev — Possible account takeover — IP: 192.168.1.1</span>
               </div>
-              <div className="flex items-center space-x-4 text-[#ffb800] bg-[#ffb800]/10 p-3 rounded border border-[#ffb800]/20">
-                <span className="w-2 h-2 rounded-full bg-[#ffb800]"></span>
-                <span>UNCERTAIN — User @sarah_j — New device detected — 12 min ago</span>
+              <div className="flex items-center space-x-6 text-[#ffb800] border-l-2 border-[#ffb800] pl-4 py-1">
+                <span className="opacity-50">[14:12:30]</span>
+                <span className="font-bold">WARNING</span>
+                <span className="text-[#8892b0]">User @sarah_j — New device detected — Verification required</span>
               </div>
-              <div className="flex items-center space-x-4 text-[#00ff88] bg-[#00ff88]/10 p-3 rounded border border-[#00ff88]/20">
-                <span className="w-2 h-2 rounded-full bg-[#00ff88]"></span>
-                <span>ALLOWED — User @mike_t — Biometric match 98% — 15 min ago</span>
+              <div className="flex items-center space-x-6 text-[#00ff88] border-l-2 border-[#00ff88] pl-4 py-1">
+                <span className="opacity-50">[14:08:15]</span>
+                <span className="font-bold">VERIFIED</span>
+                <span className="text-[#8892b0]">User @mike_t — Biometric match 98% — Session authorized</span>
               </div>
             </div>
           </div>
