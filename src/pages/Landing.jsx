@@ -123,7 +123,7 @@ const Landing = () => {
       </main>
       
       <footer className="border-t border-[#1a2035] py-8 text-center text-[#8892b0] font-mono text-xs">
-        <p>Built for Hackathon Glory. 👻 KeyGhost 2024</p>
+        <p>Built for Hackathon Glory. 👻 KeyGhost 2026</p>
       </footer>
     </div>
   );
