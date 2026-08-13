@@ -1,5 +1,8 @@
 {
-  "name": "",
-  "description": "",
-  "requestFramePermissions": []
+  "name": "KeyGhost",
+  "description": "Continuous behavioral biometric authentication platform verifying typing flight latency and rhythm.",
+  "requestFramePermissions": [],
+  "majorCapabilities": [
+    "MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"
+  ]
 }

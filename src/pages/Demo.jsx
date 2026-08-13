@@ -1,7 +1,10 @@
 import React, { useState } from 'react';
+import { Link } from 'react-router-dom';
 import KeystrokeInput from '../components/biometric/KeystrokeInput';
 import TypingVisualizer from '../components/biometric/TypingVisualizer';
 import { KeystrokeEngine } from '../lib/keystrokeEngine';
+import MatrixLogo from '../components/effects/MatrixLogo';
+import { Shield, Fingerprint, Lock, Zap, ArrowRight, RefreshCw, AlertTriangle, CheckCircle2, ShieldCheck, Cpu } from 'lucide-react';
 
 const Demo = () => {
   const [mode, setMode] = useState('register'); // register, locked, test
@@ -10,7 +13,7 @@ const Demo = () => {
   const [currentMetrics, setCurrentMetrics] = useState(null);
   const [testResult, setTestResult] = useState(null);
   const [testMetrics, setTestMetrics] = useState(null);
-  const [hackathonMode, setHackathonMode] = useState(false);
+  const [strictness, setStrictness] = useState(false);
   const [demoPhrase, setDemoPhrase] = useState('');
   const [testPhrase, setTestPhrase] = useState('');
   const [registeredPhrase, setRegisteredPhrase] = useState('');
@@ -24,7 +27,7 @@ const Demo = () => {
     if (samples.length === 0) {
       setRegisteredPhrase(phrase);
     } else if (phrase !== registeredPhrase) {
-      setErrorMsg(`Please type the exact same phrase: "${registeredPhrase}"`);
+      setErrorMsg(`Phrase must match exactly: "${registeredPhrase}"`);
       return;
     }
     
@@ -47,7 +50,7 @@ const Demo = () => {
   const handleTestComplete = (events, phrase) => {
     if (events.length < 4) return;
     
-    const threshold = hackathonMode ? 0.85 : 0.65;
+    const threshold = strictness ? 0.85 : 0.65;
 
     if (phrase !== registeredPhrase) {
       setTestResult({
@@ -70,132 +73,250 @@ const Demo = () => {
     setMode('test');
   };
 
+  const resetLab = () => {
+    setMode('register');
+    setProfile(null);
+    setSamples([]);
+    setDemoPhrase('');
+    setTestPhrase('');
+    setRegisteredPhrase('');
+    setTestResult(null);
+    setErrorMsg('');
+  };
+
   return (
-    <div className="min-h-screen text-[#f0f4ff] font-sans p-4 md:p-8 flex flex-col items-center justify-center relative overflow-hidden">
-      <div className="absolute top-4 right-4 z-50 flex items-center space-x-3 bg-[#0a0f1e]/80 border border-[#1a2035] rounded-full px-5 py-2 backdrop-blur-md">
-        <span className="text-[10px] font-mono text-[#8892b0] tracking-[0.3em]">HACKATHON_MODE</span>
-        <button 
-          onClick={() => setHackathonMode(!hackathonMode)}
-          className={`w-10 h-5 rounded-full relative transition-all duration-500 ${hackathonMode ? 'bg-[#ff2d55] shadow-[0_0_10px_rgba(255,45,85,0.5)]' : 'bg-[#1a2035]'}`}
-        >
-          <div className={`w-3.5 h-3.5 rounded-full bg-white absolute top-0.75 transition-transform duration-300 ${hackathonMode ? 'translate-x-5.5' : 'translate-x-1'}`}></div>
-        </button>
+    <div className="min-h-screen text-slate-100 font-sans pb-16">
+      {/* Top Bar */}
+      <header className="sticky top-0 z-50 flex items-center justify-between px-6 md:px-12 py-4 border-b border-white/5 bg-[#030712]/80 backdrop-blur-xl">
+        <div className="flex items-center space-x-3">
+          <div className="w-8 h-8 rounded-xl bg-emerald-500/10 border border-emerald-500/30 flex items-center justify-center">
+            <Cpu className="w-4 h-4 text-emerald-400" />
+          </div>
+          <Link to="/" className="flex items-center gap-2">
+            <MatrixLogo text="KEYGHOST" fontSize={22} />
+          </Link>
+          <span className="text-slate-600">/</span>
+          <span className="text-xs font-mono text-slate-400">SIMULATION LAB</span>
+        </div>
+
+        <div className="flex items-center space-x-4">
+          <div className="flex items-center space-x-2 bg-slate-900/80 border border-white/10 rounded-full px-4 py-1.5 text-xs font-mono">
+            <span className="text-slate-400">STRICT_MODE:</span>
+            <button 
+              onClick={() => setStrictness(!strictness)}
+              className={`w-8 h-4 rounded-full relative transition-all duration-300 ${strictness ? 'bg-rose-500' : 'bg-slate-700'}`}
+            >
+              <div className={`w-3 h-3 rounded-full bg-white absolute top-0.5 transition-transform duration-200 ${strictness ? 'translate-x-4.5' : 'translate-x-0.5'}`}></div>
+            </button>
+          </div>
+          <button 
+            onClick={resetLab} 
+            className="p-2 rounded-lg bg-slate-900 border border-white/10 text-slate-400 hover:text-white transition-colors"
+            title="Reset Simulation"
+          >
+            <RefreshCw className="w-4 h-4" />
+          </button>
+        </div>
+      </header>
+
+      {/* Hero Banner */}
+      <div className="max-w-7xl mx-auto px-6 pt-10 pb-6 text-center">
+        <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-cyan-500/10 border border-cyan-500/20 text-cyan-400 font-mono text-xs mb-3">
+          <Zap className="w-3.5 h-3.5" />
+          <span>INTERACTIVE BIOMETRIC LABORATORY</span>
+        </div>
+        <h1 className="text-3xl md:text-4xl font-display font-extrabold text-white">
+          Test Behavioral Biometrics Live
+        </h1>
+        <p className="text-sm text-slate-400 max-w-xl mx-auto mt-2">
+          Step 1: Type a passphrase 5 times to synthesize your baseline cadence. <br />
+          Step 2: Challenge your profile or try typing at a different rhythm!
+        </p>
       </div>
 
-      <div className="w-full max-w-7xl grid grid-cols-1 lg:grid-cols-2 gap-12 z-10">
-        {/* LEFT PANEL - REGISTER */}
-        <div className={`glass-panel rounded-2xl p-10 transition-all duration-700 ${mode === 'locked' || mode === 'test' ? 'opacity-40 scale-95 blur-[1px]' : 'scale-100 shadow-[0_0_50px_rgba(0,255,136,0.15)] border-[#00ff88]/30'}`}>
-          <div className="flex items-center space-x-4 mb-8">
-            <div className="w-10 h-10 bg-[#00ff88]/10 rounded flex items-center justify-center">
-              <span className="text-[#00ff88] font-mono font-bold">01</span>
+      {/* Main Grid */}
+      <main className="max-w-7xl mx-auto px-6 grid grid-cols-1 lg:grid-cols-2 gap-8 z-10 relative">
+        
+        {/* PANEL 1: ENROLLMENT */}
+        <div className={`glass-panel p-8 rounded-2xl border transition-all duration-500 ${mode === 'locked' || mode === 'test' ? 'border-emerald-500/30 bg-emerald-950/10' : 'border-white/10 shadow-2xl'}`}>
+          <div className="flex items-center justify-between mb-6">
+            <div className="flex items-center space-x-3">
+              <div className="w-8 h-8 rounded-lg bg-emerald-500/10 border border-emerald-500/30 flex items-center justify-center font-mono font-bold text-emerald-400 text-xs">
+                01
+              </div>
+              <h2 className="text-lg font-display font-bold text-white">Enrollment Phase</h2>
             </div>
-            <h2 className="text-2xl font-display font-bold tracking-widest text-[#00ff88]">ENROLL_BIOMETRICS</h2>
+            {mode === 'locked' && (
+              <span className="px-3 py-1 rounded-full bg-emerald-500/20 border border-emerald-500/40 text-emerald-400 font-mono text-xs flex items-center gap-1.5">
+                <ShieldCheck className="w-3.5 h-3.5" /> PROFILE LOCKED
+              </span>
+            )}
           </div>
-          
+
           {mode === 'register' ? (
-            <div className="space-y-8">
-              <div className="space-y-3">
-                <div className="flex justify-between font-mono text-[10px] text-[#8892b0] tracking-widest">
-                  <span>SYNC_PROGRESS</span>
-                  <span className="text-[#00ff88]">{samples.length} / 5</span>
+            <div className="space-y-6">
+              {/* Progress bar */}
+              <div className="space-y-2">
+                <div className="flex justify-between font-mono text-xs text-slate-400">
+                  <span>SAMPLE SYNTHESIS</span>
+                  <span className="text-emerald-400 font-bold">{samples.length} / 5</span>
                 </div>
-                <div className="h-1.5 bg-[#030712] rounded-full overflow-hidden border border-[#1a2035]">
-                  <div className="h-full bg-[#00ff88] transition-all duration-1000 shadow-[0_0_10px_rgba(0,255,136,0.5)]" style={{ width: `${(samples.length/5)*100}%` }}></div>
+                <div className="h-2 bg-slate-900 rounded-full overflow-hidden border border-white/5">
+                  <div 
+                    className="h-full bg-gradient-to-r from-emerald-500 to-teal-400 transition-all duration-500" 
+                    style={{ width: `${(samples.length / 5) * 100}%` }}
+                  ></div>
                 </div>
               </div>
-              
-              <div className="space-y-4">
-                <label className="block text-[10px] font-mono text-[#8892b0] tracking-widest">
-                  {samples.length === 0 ? "INPUT_INITIAL_PHRASE" : `REPLICATE_PHRASE: "${registeredPhrase}"`}
+
+              {/* Input field */}
+              <div className="space-y-3">
+                <label className="block text-xs font-mono text-slate-300">
+                  {samples.length === 0 ? "1. Choose & Type a Passphrase:" : `2. Repeat exact phrase: "${registeredPhrase}"`}
                 </label>
                 <KeystrokeInput 
                   mode="training" 
-                  placeholder="Awaiting input..." 
+                  placeholder="e.g. keyghost_secure_2026" 
                   value={demoPhrase}
                   onChange={e => setDemoPhrase(e.target.value)}
                   onTypingComplete={(events, finalPhrase) => { handleRegisterComplete(events, finalPhrase); setDemoPhrase(''); }}
                   onRealtimeUpdate={setCurrentMetrics}
                   type="text"
-                  className="text-3xl text-center cyber-input py-8 tracking-[0.2em]"
+                  className="text-lg text-center cyber-input py-4 rounded-xl"
                 />
               </div>
-              {errorMsg && <p className="text-[#ff2d55] text-xs font-mono text-center animate-pulse tracking-widest bg-[#ff2d55]/10 py-2 rounded border border-[#ff2d55]/20">{errorMsg}</p>}
+
+              {errorMsg && (
+                <p className="text-rose-400 text-xs font-mono text-center bg-rose-500/10 py-2.5 rounded-lg border border-rose-500/20">
+                  {errorMsg}
+                </p>
+              )}
+
+              {/* Visualizer */}
               <TypingVisualizer metrics={currentMetrics} isComplete={false} />
             </div>
           ) : (
-            <div className="text-center space-y-8 py-16">
-              <div className="relative w-32 h-32 mx-auto">
-                <div className="absolute inset-0 bg-[#00ff88]/10 rounded-full animate-ping"></div>
-                <div className="relative z-10 w-full h-full bg-[#0a0f1e] border border-[#00ff88] rounded-full flex items-center justify-center shadow-[0_0_40px_rgba(0,255,136,0.3)]">
-                  <span className="text-5xl">🔐</span>
+            <div className="py-8 text-center space-y-6">
+              <div className="w-20 h-20 mx-auto rounded-full bg-emerald-500/10 border border-emerald-500/30 flex items-center justify-center shadow-[0_0_30px_rgba(16,185,129,0.2)]">
+                <Fingerprint className="w-10 h-10 text-emerald-400" />
+              </div>
+              <div>
+                <h3 className="text-xl font-display font-bold text-white">Biometric Signature Synthesized</h3>
+                <p className="text-xs font-mono text-slate-400 mt-1">Passphrase: "{registeredPhrase}"</p>
+              </div>
+
+              {profile && (
+                <div className="grid grid-cols-3 gap-3 font-mono text-xs">
+                  <div className="bg-slate-950 p-3 rounded-xl border border-white/5">
+                    <span className="text-slate-500 block text-[10px]">AVG DWELL</span>
+                    <span className="text-emerald-400 font-bold">{profile.mean_dwell.toFixed(0)} ms</span>
+                  </div>
+                  <div className="bg-slate-950 p-3 rounded-xl border border-white/5">
+                    <span className="text-slate-500 block text-[10px]">AVG FLIGHT</span>
+                    <span className="text-emerald-400 font-bold">{profile.mean_flight.toFixed(0)} ms</span>
+                  </div>
+                  <div className="bg-slate-950 p-3 rounded-xl border border-white/5">
+                    <span className="text-slate-500 block text-[10px]">TYPING SPEED</span>
+                    <span className="text-emerald-400 font-bold">{profile.speed.toFixed(1)} CPS</span>
+                  </div>
                 </div>
-              </div>
-              <h3 className="text-3xl font-display font-black tracking-widest text-[#00ff88]">PROFILE_LOCKED</h3>
-              <div className="grid grid-cols-3 gap-4 font-mono text-[10px] text-[#8892b0] tracking-tighter">
-                <div className="bg-[#030712] p-3 rounded border border-[#1a2035]">DWELL: <span className="text-[#00ff88]">{profile.mean_dwell.toFixed(0)}ms</span></div>
-                <div className="bg-[#030712] p-3 rounded border border-[#1a2035]">FLIGHT: <span className="text-[#00ff88]">{profile.mean_flight.toFixed(0)}ms</span></div>
-                <div className="bg-[#030712] p-3 rounded border border-[#1a2035]">SPEED: <span className="text-[#00ff88]">{profile.speed.toFixed(1)}cps</span></div>
-              </div>
+              )}
             </div>
           )}
         </div>
 
-        {/* RIGHT PANEL - TEST */}
-        <div className={`glass-panel rounded-2xl p-10 transition-all duration-700 ${(mode === 'locked' || mode === 'test') ? 'scale-100 shadow-[0_0_50px_rgba(0,212,255,0.15)] border-[#00d4ff]/30' : 'opacity-40 scale-95 pointer-events-none blur-[1px]'}`}>
-          <div className="flex items-center space-x-4 mb-8">
-            <div className="w-10 h-10 bg-[#00d4ff]/10 rounded flex items-center justify-center">
-              <span className="text-[#00d4ff] font-mono font-bold">02</span>
+        {/* PANEL 2: VERIFICATION CHALLENGE */}
+        <div className={`glass-panel p-8 rounded-2xl border transition-all duration-500 ${mode === 'locked' || mode === 'test' ? 'border-cyan-500/30 shadow-2xl' : 'opacity-40 pointer-events-none border-white/5'}`}>
+          <div className="flex items-center space-x-3 mb-6">
+            <div className="w-8 h-8 rounded-lg bg-cyan-500/10 border border-cyan-500/30 flex items-center justify-center font-mono font-bold text-cyan-400 text-xs">
+              02
             </div>
-            <h2 className="text-2xl font-display font-bold tracking-widest text-[#00d4ff]">CHALLENGE_IDENTITY</h2>
+            <h2 className="text-lg font-display font-bold text-white">Identity Challenge</h2>
           </div>
-          
-          <div className="space-y-10">
-            <div className="space-y-4">
-              <label className="block text-[10px] font-mono text-[#8892b0] tracking-widest">INPUT_VERIFICATION_PHRASE</label>
+
+          <div className="space-y-6">
+            <div className="space-y-3">
+              <label className="block text-xs font-mono text-slate-300">
+                Type passphrase to test biometric match:
+              </label>
               <KeystrokeInput 
                 mode="login" 
-                placeholder="Verify identity..." 
+                placeholder={registeredPhrase || "Type verification phrase..."} 
                 value={testPhrase}
                 onChange={e => setTestPhrase(e.target.value)}
                 onTypingComplete={(events, finalPhrase) => { handleTestComplete(events, finalPhrase); setTestPhrase(''); }}
                 onRealtimeUpdate={setTestMetrics}
                 type="text"
-                className="text-3xl text-center cyber-input py-8 tracking-[0.2em]"
+                className="text-lg text-center cyber-input py-4 rounded-xl"
               />
             </div>
+
             <TypingVisualizer metrics={testMetrics} isComplete={false} />
-            <div className="bg-[#030712]/50 border border-[#1a2035] p-6 rounded-xl">
-              <p className="text-[#8892b0] font-mono text-[10px] leading-relaxed tracking-widest">
-                <span className="text-[#00d4ff]">&gt;</span> SYSTEM_ADVISORY: Behavioral biometrics are analyzed in real-time. Any deviation from the registered rhythm will trigger an immediate access block.
-              </p>
+
+            <div className="p-4 rounded-xl bg-slate-950/60 border border-white/5 text-xs text-slate-400 space-y-1 font-mono">
+              <span className="text-cyan-400 font-bold">INFO:</span>
+              <p>Try typing faster, slower, or having someone else type the password to see how the neural match score detects variations!</p>
             </div>
           </div>
         </div>
-      </div>
 
-      {/* CENTER DISPLAY - RESULT */}
+      </main>
+
+      {/* RESULT MODAL DIALOG */}
       {testResult && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-[#030712]/90 backdrop-blur-md animate-fade-in" onClick={() => { setTestResult(null); setMode('locked'); }}>
-          <div className={`text-center space-y-8 p-12 rounded-3xl border-4 ${testResult.verdict === 'MATCH' ? 'border-[#00ff88] shadow-[0_0_100px_rgba(0,255,136,0.5)]' : 'border-[#ff2d55] shadow-[0_0_100px_rgba(255,45,85,0.5)]'} bg-[#0a0f1e] max-w-2xl w-full mx-4`}>
-            <div className="relative w-64 h-64 mx-auto flex items-center justify-center">
-              <svg className="absolute inset-0 w-full h-full transform -rotate-90">
-                <circle cx="128" cy="128" r="120" stroke="#1a2035" strokeWidth="16" fill="none" />
-                <circle cx="128" cy="128" r="120" stroke={testResult.verdict === 'MATCH' ? '#00ff88' : '#ff2d55'} strokeWidth="16" fill="none" strokeDasharray="753.9" strokeDashoffset={753.9 * (1 - testResult.score)} className="transition-all duration-1000 ease-out" />
-              </svg>
-              <div className="text-center">
-                <div className="text-6xl font-display font-black">{(testResult.score * 100).toFixed(1)}%</div>
-                <div className="font-mono text-sm text-[#8892b0] mt-2">MATCH SCORE</div>
+        <div 
+          className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 backdrop-blur-md p-4 animate-fade-in"
+          onClick={() => { setTestResult(null); setMode('locked'); }}
+        >
+          <div 
+            className={`glass-panel max-w-lg w-full p-8 rounded-3xl border-2 text-center space-y-6 shadow-2xl ${testResult.verdict === 'MATCH' ? 'border-emerald-500 shadow-emerald-500/20' : 'border-rose-500 shadow-rose-500/20'}`}
+            onClick={e => e.stopPropagation()}
+          >
+            <div className="w-16 h-16 mx-auto rounded-full flex items-center justify-center bg-slate-900 border border-white/10">
+              {testResult.verdict === 'MATCH' ? (
+                <CheckCircle2 className="w-10 h-10 text-emerald-400" />
+              ) : (
+                <AlertTriangle className="w-10 h-10 text-rose-400" />
+              )}
+            </div>
+
+            <div>
+              <h2 className={`text-2xl font-display font-extrabold ${testResult.verdict === 'MATCH' ? 'text-emerald-400' : 'text-rose-400'}`}>
+                {testResult.verdict === 'MATCH' ? 'IDENTITY CONFIRMED' : testResult.verdict === 'WRONG_PASSWORD' ? 'INCORRECT PASSPHRASE' : 'BIOMETRIC ANOMALY BLOCKED'}
+              </h2>
+              <p className="text-xs font-mono text-slate-400 mt-1">
+                {testResult.verdict === 'MATCH' 
+                  ? 'Keystroke timing pattern matches the enrolled user fingerprint.' 
+                  : 'Flight times & dwell latency deviated significantly from enrolled profile.'}
+              </p>
+            </div>
+
+            {/* Score Ring / Bar */}
+            <div className="bg-slate-950 p-6 rounded-2xl border border-white/5 space-y-3">
+              <div className="flex justify-between items-center text-xs font-mono">
+                <span className="text-slate-400">BIOMETRIC SIMILARITY SCORE</span>
+                <span className={`font-bold text-base ${testResult.verdict === 'MATCH' ? 'text-emerald-400' : 'text-rose-400'}`}>
+                  {(testResult.score * 100).toFixed(1)}%
+                </span>
+              </div>
+              <div className="h-3 bg-slate-900 rounded-full overflow-hidden border border-white/5">
+                <div 
+                  className={`h-full transition-all duration-700 ${testResult.verdict === 'MATCH' ? 'bg-emerald-500' : 'bg-rose-500'}`}
+                  style={{ width: `${Math.min(100, Math.max(0, testResult.score * 100))}%` }}
+                ></div>
+              </div>
+              <div className="flex justify-between items-center text-[11px] font-mono text-slate-500">
+                <span>SECURITY THRESHOLD: {(testResult.threshold * 100).toFixed(0)}%</span>
+                <span>MODE: {strictness ? 'STRICT (85%)' : 'STANDARD (65%)'}</span>
               </div>
             </div>
-            
-            <div className="space-y-2">
-              <h2 className={`text-5xl font-display font-black tracking-tighter ${testResult.verdict === 'MATCH' ? 'text-[#00ff88]' : 'text-[#ff2d55]'}`}>
-                {testResult.verdict === 'MATCH' ? '✓ IDENTITY CONFIRMED' : testResult.verdict === 'WRONG_PASSWORD' ? '✗ INCORRECT PASSWORD' : '✗ IMPOSTOR DETECTED'}
-              </h2>
-              <p className="font-mono text-[#8892b0]">Threshold: {(testResult.threshold * 100).toFixed(1)}%</p>
-            </div>
-            
-            <p className="text-sm text-[#8892b0] animate-pulse">Click anywhere to try again</p>
+
+            <button 
+              onClick={() => { setTestResult(null); setMode('locked'); }}
+              className="cyber-button w-full py-3.5 rounded-xl text-xs font-bold"
+            >
+              TEST ANOTHER SAMPLE
+            </button>
           </div>
         </div>
       )}

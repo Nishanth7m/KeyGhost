@@ -42,7 +42,7 @@ const Dashboard = () => {
             <p className="text-[#8892b0] font-mono text-xs tracking-widest">
               OPERATOR: <span className="text-[#00ff88]">{user?.username}</span> | 
               ENCRYPTION: <span className="text-[#00d4ff]">RSA_4096</span> | 
-              STATUS: <span className="text-[#00ff88] animate-pulse">PROTECTED</span>
+              STATUS: <span className={`${localStorage.getItem('keyghost_use_mock') === 'true' ? 'text-[#00d4ff]' : 'text-[#00ff88]'} animate-pulse`}>{localStorage.getItem('keyghost_use_mock') === 'true' ? 'SECURE_OFFLINE_NODE' : 'PROTECTED'}</span>
             </p>
           </div>
           <button onClick={logout} className="cyber-button px-6 py-2 rounded text-xs border-[#ff2d55]/30 text-[#ff2d55] hover:bg-[#ff2d55]/10 hover:shadow-[0_0_15px_rgba(255,45,85,0.3)]">

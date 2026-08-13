@@ -1,12 +1,13 @@
 import React, { useState, useEffect, useRef } from 'react';
 
-const HackerText = ({ text, speed = 50, delay = 0, className = '' }) => {
+const HackerText = ({ text = '', speed = 50, delay = 0, className = '' }) => {
   const [displayText, setDisplayText] = useState('');
   const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789!@#$%^&*()_+';
   const iterationsRef = useRef(0);
   const intervalRef = useRef(null);
 
   useEffect(() => {
+    if (!text) return;
     const startAnimation = () => {
       intervalRef.current = setInterval(() => {
         setDisplayText((prev) => {
